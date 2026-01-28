@@ -8,7 +8,8 @@ LD = ld
 # Flags
 ASMFLAGS = -f bin
 CFLAGS = -m32 -ffreestanding -nostdlib -nostdinc -fno-pie -fno-stack-protector
-LDFLAGS = -m elf_i386 -T linker.ld
+# LDFLAGS for future use when adding C code
+# LDFLAGS = -m elf_i386 -T linker.ld
 
 # Directories
 BUILD_DIR = build

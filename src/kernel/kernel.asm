@@ -9,9 +9,11 @@ kernel_start:
     mov si, kernel_msg
     call print_string
     
-    ; Halt
+    ; Halt - infinite loop to handle interrupts
     cli
+.halt:
     hlt
+    jmp .halt
 
 print_string:
     lodsb
@@ -25,5 +27,5 @@ print_string:
 
 kernel_msg: db 'PeachOS Kernel Running!', 13, 10, 0
 
-; Pad to 512 bytes
+; Pad to 512 bytes (safe padding that won't go negative)
 times 512-($-$$) db 0

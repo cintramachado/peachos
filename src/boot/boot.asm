@@ -5,6 +5,9 @@
 [ORG 0x7c00]        ; BIOS loads bootloader at 0x7c00
 
 start:
+    ; Save boot drive number from BIOS
+    mov [boot_drive], dl
+    
     ; Set up segments
     xor ax, ax
     mov ds, ax
@@ -19,7 +22,7 @@ start:
     ; Load kernel from disk
     ; Reset disk system
     mov ah, 0x00
-    mov dl, 0x80        ; First hard drive
+    mov dl, [boot_drive] ; Use boot drive from BIOS
     int 0x13
     
     ; Read sectors from disk
@@ -28,7 +31,7 @@ start:
     mov ch, 0           ; Cylinder 0
     mov cl, 2           ; Sector 2 (sector 1 is boot sector)
     mov dh, 0           ; Head 0
-    mov dl, 0x80        ; Drive 0
+    mov dl, [boot_drive] ; Use boot drive from BIOS
     mov bx, 0x7e00      ; Load kernel at 0x7e00
     int 0x13
     jc disk_error
@@ -56,6 +59,8 @@ print_string:
 msg_loading: db 'Loading PeachOS...', 13, 10, 0
 msg_success: db 'Kernel loaded! Starting...', 13, 10, 0
 msg_error: db 'Disk read error!', 13, 10, 0
+
+boot_drive: db 0
 
 ; Boot signature
 times 510-($-$$) db 0
