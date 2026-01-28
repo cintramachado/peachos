@@ -1,0 +1,25 @@
+# Build outputs
+bin/
+build/
+
+# Multiboot build artifacts
+multboot/iso/
+multboot/*.iso
+multboot/*.elf
+multboot/*.o
+
+# Object files and binaries
+*.o
+*.bin
+*.elf
+*.img
+
+# Toolchain binaries (local cross-compiler)
+toolchain/
+
+# Editor/OS cruft
+.vscode/
+*.log
+*~
+.DS_Store
+Thumbs.db

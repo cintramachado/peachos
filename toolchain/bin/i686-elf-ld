@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+IMAGE="joshwyant/gcc-cross"
+WORKDIR="/workspace"
+
+docker run --rm \
+  -v "${PWD}":"${WORKDIR}" \
+  -w "${WORKDIR}" \
+  "${IMAGE}" \
+  i686-elf-ld "$@"
