@@ -1,6 +1,6 @@
 # Build outputs
-bin/
-build/
+/bin
+/build
 
 # Multiboot build artifacts
 multboot/iso/
