@@ -1,5 +1,5 @@
 TOOLCHAIN = ./toolchain/bin
-FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/io/io.o
+FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/idt.o ./build/memory/memory.o ./build/memory/heap/heap.o ./build/memory/heap/kheap.o ./build/io/io.o
 INCLUDES = -I./src
 FLAGS = -g -ffreestanding -falign-jumps -falign-functions -falign-labels -falign-loops -fstrength-reduce -fomit-frame-pointer -finline-functions -Wno-unused-function -fno-builtin -Werror -Wno-unused-label -Wno-cpp -Wno-unused-parameter -nostdlib -nostartfiles -nodefaultlibs -Wall -O0 -Iinc
 
@@ -37,6 +37,12 @@ run:
 ./build/memory/memory.o: ./src/memory/memory.c
 	$(TOOLCHAIN)/i686-elf-gcc $(INCLUDES) -I./src/memory $(FLAGS) -std=gnu99 -c ./src/memory/memory.c -o ./build/memory/memory.o
 
+./build/memory/heap/heap.o: ./src/memory/heap/heap.c
+	$(TOOLCHAIN)/i686-elf-gcc $(INCLUDES) -I./src/memory $(FLAGS) -std=gnu99 -c ./src/memory/heap/heap.c -o ./build/memory/heap/heap.o
+
+./build/memory/heap/kheap.o: ./src/memory/heap/kheap.c
+	$(TOOLCHAIN)/i686-elf-gcc $(INCLUDES) -I./src/memory $(FLAGS) -std=gnu99 -c ./src/memory/heap/kheap.c -o ./build/memory/heap/kheap.o
+
 ./build/io/io.o: ./src/io/io.asm
 	nasm -f elf -g ./src/io/io.asm -o ./build/io/io.o
 
@@ -47,4 +53,6 @@ clean:
 	rm -rf ${FILES}
 	rm -rf ./build/kernelfull.o
 	rm -rf ./build/memory/memory.o
+	rm -rf ./build/memory/heap/heap.o
+	rm -rf ./build/memory/heap/kheap.o
 	rm -rf ./build/io/io.o

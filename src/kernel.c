@@ -2,10 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "idt/idt.h"
-#include "memory/memory.h"
-#include "config.h"
-#include "io/io.h"
-
+#include "memory/heap/kheap.h"
 
 uint16_t* video_mem = 0;
 uint16_t terminal_row = 0;
@@ -29,7 +26,7 @@ void terminal_writechar(char c, char colour)
         terminal_col = 0;
         return;
     }
-    
+
     terminal_putchar(terminal_col, terminal_row, c, colour);
     terminal_col += 1;
     if (terminal_col >= VGA_WIDTH)
@@ -76,9 +73,11 @@ void print(const char* str)
 void kernel_main()
 {
     terminal_initialize();
-    print("Welcome to PeachOS!\ntest");
+    print("Hello world!\ntest");
 
+    // Initialize the heap
+    kheap_init();
+
+    // Initialize the interrupt descriptor table
     idt_init();
-    outb(0x20, 0x20); // Send End of Interrupt (EOI) to PIC
-    
 }
