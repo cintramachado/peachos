@@ -3,8 +3,13 @@ FILES = ./build/kernel.asm.o ./build/kernel.o ./build/idt/idt.asm.o ./build/idt/
 INCLUDES = -I./src
 FLAGS = -g -ffreestanding -falign-jumps -falign-functions -falign-labels -falign-loops -fstrength-reduce -fomit-frame-pointer -finline-functions -Wno-unused-function -fno-builtin -Werror -Wno-unused-label -Wno-cpp -Wno-unused-parameter -nostdlib -nostartfiles -nodefaultlibs -Wall -O0 -Iinc
 
-all: ./bin/boot.bin ./bin/kernel.bin
-	rm -rf ./bin/os.bin
+DIRS = ./build ./build/idt ./build/memory ./build/memory/heap ./build/io
+
+all:  ./bin/boot.bin ./bin/kernel.bin dirs
+
+dirs:
+	mkdir -p $(DIRS)
+
 	dd if=./bin/boot.bin >> ./bin/os.bin
 	dd if=./bin/kernel.bin >> ./bin/os.bin
 	dd if=/dev/zero bs=512 count=100 >> ./bin/os.bin
@@ -14,6 +19,9 @@ run-debug:
 
 run:
 	qemu-system-i386 -drive format=raw,file=./bin/os.bin
+
+run-term:
+	qemu-system-i386 -drive format=raw,file=./bin/os.bin -nographic -serial stdio
 
 ./bin/kernel.bin: $(FILES)
 	$(TOOLCHAIN)/i686-elf-ld -g -relocatable $(FILES) -o ./build/kernelfull.o
