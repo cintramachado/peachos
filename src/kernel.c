@@ -73,11 +73,14 @@ void print(const char* str)
 void kernel_main()
 {
     terminal_initialize();
-    print("Hello world funcionou saporra!\ntest");
+    print("Hello world!\ntest");
 
     // Initialize the heap
     kheap_init();
 
     // Initialize the interrupt descriptor table
     idt_init();
+
+    // Enable the system interrupts
+    enable_interrupts();
 }
